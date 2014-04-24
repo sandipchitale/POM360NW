@@ -1,7 +1,9 @@
 (function() {
+    var path = require('path');
     var pathExtra = require('path-extra');
     var gui = require('nw.gui');
     var openThis = require('open');
+    var process = require('process');
 
     angular.module("POM360App", ['ui.router']).config(function($stateProvider, $urlRouterProvider) {
         $stateProvider.state('POM360', {
@@ -26,7 +28,7 @@
         $scope.config = {
             mvnCommand: 'mvn',
             mvnOptions: '',
-            pomFile: 'pom.xml',
+            pomFile: path.join(process.cwd(), 'pom.xml'),
             settingsFile: '~/.m2/settings.xml'
         }
 
