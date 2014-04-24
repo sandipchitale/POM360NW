@@ -31,7 +31,7 @@
 						<a ng-click="runMvn()" href="#"><span class="glyphicon glyphicon-play-circle"></span></a>
 					</li>
 					<li>
-						<a onclick="openThis(pathExtra.homedir() + '/.m2/repository');return false;" href="#"><span class="glyphicon glyphicon-hdd"></span></a>
+						<a ng-click="openThisRelativeToHomeDir('.m2/repository')" href="#"><span class="glyphicon glyphicon-hdd"></span></a>
 					</li>
 					<li>
 						<a href="#"><span class="glyphicon glyphicon-cloud"></span></a>
@@ -40,13 +40,13 @@
 						<a href="#"><span class="glyphicon glyphicon-book"></span></a>
 					</li>
 					<li>
-						<a onclick="openThis('presentation/MavenM2ETycho.pdf');return false;" href="#"><span class="glyphicon glyphicon-picture"></span></a>
+						<a ng-click="openThis('presentation/MavenM2ETycho.pdf')" href="#"><span class="glyphicon glyphicon-picture"></span></a>
 					</li>
 					<li>
-						<a onclick="openThis('http://books.sonatype.com/mvnref-book/reference/');return false;" href="#"><span class="glyphicon glyphicon-info-sign"></span></a>
+						<a ng-click="openThis('http://books.sonatype.com/mvnref-book/reference/')" href="#"><span class="glyphicon glyphicon-info-sign"></span></a>
 					</li>
 					<li class="navbar-right">
-						<a onclick="gui.Window.get().close(true);" href="#"><span class="glyphicon glyphicon-remove-circle"></span></a>
+						<a ng-click="exit()" href="#"><span class="glyphicon glyphicon-remove-circle"></span></a>
 					</li>
 				</ul>
 			</div><!-- /.navbar-collapse -->
@@ -78,8 +78,8 @@
 				<br/>
 				<form class="form-inline" role="form">
 					<div class="form-group">
-						<label class="sr-only" for="find">Email address</label>
-						<input type="search" class="form-control" id="find" placeholder="Find...">
+						<label class="sr-only" for="search">Search</label>
+						<input type="search" class="form-control" id="search" placeholder="Search text">
 					</div>
 					<button type="button" class="btn btn-default">
 						<span class="glyphicon glyphicon-search"></span>
@@ -92,21 +92,24 @@
 					<button type="button" class="btn btn-default pull-right">
 						<span class="glyphicon glyphicon-arrow-down"></span>
 					</button>
+					<button ng-click="debug()" type="button" class="btn btn-default pull-right">
+						<span class="glyphicon glyphicon-eye-open"></span>
+					</button>
 				</form>
 				<br/>
 				<form class="form-horizontal" role="form">
   					<div class="form-group">
 						<label for="mvn" class="col-sm-1 control-label">mvn</label>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default" onclick="openThis('http://books.sonatype.com/mvnref-book/reference/installation.html');return false;" >
+							<button type="button" class="btn btn-default" ng-click="openThis('http://books.sonatype.com/mvnref-book/reference/installation.html')" >
 								<span class="glyphicon glyphicon-info-sign"></span>
 							</button>
 						</div>
 						<div class="col-sm-9">
-							<input type="text" class="form-control" id="mvn" placeholder="mvn command" value="mvn"></input>
+							<input type="text" class="form-control" id="mvn" placeholder="mvn command" ng-model="config.mvnCommand"></input>
 						</div>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default pull-right" id="selectmvn">
+							<button ng-click="selectMvnCommand()" type="button" class="btn btn-default pull-right" id="selectmvn">
 								<span class="glyphicon glyphicon-floppy-open"></span>
 							</button>
 							<input style="display: none;" id="mvnCommandSelector" type="file" />
@@ -115,23 +118,23 @@
 					<div class="form-group">
 						<label for="options" class="col-sm-1 control-label">Options</label>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default" onclick="openThis('http://books.sonatype.com/mvnref-book/reference/running-sect-options.html');return false;" >
+							<button type="button" class="btn btn-default" ng-click="openThis('http://books.sonatype.com/mvnref-book/reference/running-sect-options.html')" >
 								<span class="glyphicon glyphicon-info-sign"></span>
 							</button>
 						</div>
 						<div class="col-sm-9">
-							<input type="text" class="form-control" id="options" placeholder="mvn options">
+							<input type="text" class="form-control" id="options" placeholder="mvn options" ng-model="config.mvnOptions"></input>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="pom" class="col-sm-1 control-label">POM</label>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default" onclick="openThis('http://books.sonatype.com/mvnref-book/reference/pom-relationships-sect-pom.html');return false;" >
+							<button type="button" class="btn btn-default" ng-click="openThis('http://books.sonatype.com/mvnref-book/reference/pom-relationships-sect-pom.html')" >
 								<span class="glyphicon glyphicon-info-sign"></span>
 							</button>
 						</div>
 						<div class="col-sm-8">
-							<input type="text" class="form-control" id="pom" placeholder="POM file">
+							<input type="text" class="form-control" id="pom" placeholder="POM file" ng-model="config.pomFile"></input>
 						</div>
 						<div class="col-sm-1">
 							<button type="button" class="btn btn-default pull-right">
@@ -139,7 +142,7 @@
 							</button>
 						</div>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default pull-right" id="selectPom">
+							<button ng-click="selectPomFile()" type="button" class="btn btn-default pull-right" id="selectPom">
 								<span class="glyphicon glyphicon-floppy-open"></span>
 							</button>
 							<input style="display: none;" id="pomFileSelector" type="file" accept=".xml"/>
@@ -148,12 +151,12 @@
 					<div class="form-group">
 						<label for="settings" class="col-sm-1 control-label">Settings</label>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default" onclick="openThis('http://books.sonatype.com/mvnref-book/reference/appendix-settings-sect-quick-overview.html');return false;" >
+							<button type="button" class="btn btn-default" ng-click="openThis('http://books.sonatype.com/mvnref-book/reference/appendix-settings-sect-quick-overview.html')" >
 								<span class="glyphicon glyphicon-info-sign"></span>
 							</button>
 						</div>
 						<div class="col-sm-8">
-							<input type="text" class="form-control" id="settings" placeholder="Settings file">
+							<input type="text" class="form-control" id="settings" placeholder="Settings file" ng-model="config.settingsFile"></input>
 						</div>
 						<div class="col-sm-1">
 							<button type="button" class="btn btn-default pull-right">
@@ -161,7 +164,7 @@
 							</button>
 						</div>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default pull-right" id="selectSettings">
+							<button ng-click="selectSettingsFile()" type="button" class="btn btn-default pull-right" id="selectSettings">
 								<span class="glyphicon glyphicon-floppy-open"></span>
 							</button>
 							<input style="display: none;" id="settingsFileSelector" type="file" accept=".xml"/>
@@ -178,47 +181,5 @@
 		<script src="js/angular.js"></script>
 		<script src="js/angular-ui-router.min.js"></script>
 		<script src="js/POM360.js"></script>
-		<script>
-			var openThis = require('open');
-			var pathExtra = require('path-extra');
-			var gui = require('nw.gui');
-
-			// POM selection
-			function selectMvnCommand() {
-				var mvnCommandSelector = $('#mvnCommandSelector');
-				mvnCommandSelector.change(function(evt) {
-			    	$('#mvn').val(mvnCommandSelector.val());
-			    });
-
-				mvnCommandSelector.trigger('click');
-			}
-			$('#selectmvn').click(function() {
-				selectMvnCommand();
-			});
-
-			function selectPomFile() {
-				var pomFileSelector = $('#pomFileSelector');
-				pomFileSelector.change(function(evt) {
-			    	$('#pom').val(pomFileSelector.val());
-			    });
-
-				pomFileSelector.trigger('click');
-			}
-			$('#selectPom').click(function() {
-				selectPomFile();
-			});
-
-			function selectSettingsFile() {
-				var settingsFileSelector = $('#settingsFileSelector');
-				settingsFileSelector.change(function(evt) {
-			    	$('#settings').val(settingsFileSelector.val());
-			    });
-
-				settingsFileSelector.trigger('click');
-			}
-			$('#selectSettings').click(function() {
-				selectSettingsFile();
-			});
-		</script>
 	</body>
 </html>
