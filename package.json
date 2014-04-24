@@ -1,9 +1,14 @@
 {
 	"name": "POM360NW",
 	"main": "POM360.html",
+	"description": "POM360 using node-webkit",
+	"version": "1.0.0",
+	"keywords": ["maven", "node-webkit"],
 	"window": {
-	    "toolbar": true,
-	    "width": 1400,
-	    "height": 800
-    }
+		"toolbar": false,
+		"icon": "icons/POM360.png",
+		"frame": false,
+		"width": 1400,
+		"height": 800
+	}
 }

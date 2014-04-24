@@ -18,15 +18,15 @@
 		<![endif]-->
 	</head>
 	<body ng-controller="POM360Controller">
-		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<nav style="-webkit-app-region: drag;" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<!-- Brand and toggle get grouped for better mobile display -->
-			<div class="navbar-header">
+			<div style="-webkit-app-region: no-drag;" class="navbar-header">
 				<a class="navbar-brand" href="#"><img style="vertical-align: middle" src="icons/POM360.png"/> POM 360</a>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
+			<div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
+				<ul style="-webkit-app-region: no-drag;" class="nav navbar-nav">
 					<li>
 						<a href="#"><span class="glyphicon glyphicon-play-circle"></span></a>
 					</li>
@@ -43,7 +43,10 @@
 						<a onclick="openPDF('presentation/MavenM2ETycho.pdf');return false;" href="#"><span class="glyphicon glyphicon-picture"></span></a>
 					</li>
 					<li>
-						<a target="_blank" href="http://books.sonatype.com/mvnref-book/reference/"><span class="glyphicon glyphicon-info-sign"></span></a>
+						<a onclick="openPDF('http://books.sonatype.com/mvnref-book/reference/');return false;" href="#"><span class="glyphicon glyphicon-info-sign"></span></a>
+					</li>
+					<li class="navbar-right">
+						<a onclick="gui.Window.get().close(true);" href="#"><span class="glyphicon glyphicon-remove-circle"></span></a>
 					</li>
 				</ul>
 			</div><!-- /.navbar-collapse -->
@@ -174,6 +177,7 @@
 		<script src="js/POM360.js"></script>
 		<script>
 			var openPDF = require('open');
+			var gui = require('nw.gui');
 		</script>
 	</body>
 </html>
