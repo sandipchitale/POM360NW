@@ -103,12 +103,13 @@
 							</button>
 						</div>
 						<div class="col-sm-9">
-							<input type="text" class="form-control" id="mvn" placeholder="mvn command">
+							<input type="text" class="form-control" id="mvn" placeholder="mvn command" value="mvn"></input>
 						</div>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default pull-right">
+							<button type="button" class="btn btn-default pull-right" id="selectmvn">
 								<span class="glyphicon glyphicon-floppy-open"></span>
 							</button>
+							<input style="display: none;" id="mvnCommandSelector" type="file" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -138,9 +139,10 @@
 							</button>
 						</div>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default pull-right">
+							<button type="button" class="btn btn-default pull-right" id="selectPom">
 								<span class="glyphicon glyphicon-floppy-open"></span>
 							</button>
+							<input style="display: none;" id="pomFileSelector" type="file" accept=".xml"/>
 						</div>
 					</div>
 					<div class="form-group">
@@ -159,9 +161,10 @@
 							</button>
 						</div>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default pull-right">
+							<button type="button" class="btn btn-default pull-right" id="selectSettings">
 								<span class="glyphicon glyphicon-floppy-open"></span>
 							</button>
+							<input style="display: none;" id="settingsFileSelector" type="file" accept=".xml"/>
 						</div>
 					</div>
 				</form>
@@ -179,6 +182,43 @@
 			var openThis = require('open');
 			var pathExtra = require('path-extra');
 			var gui = require('nw.gui');
+
+			// POM selection
+			function selectMvnCommand() {
+				var mvnCommandSelector = $('#mvnCommandSelector');
+				mvnCommandSelector.change(function(evt) {
+			    	$('#mvn').val(mvnCommandSelector.val());
+			    });
+
+				mvnCommandSelector.trigger('click');
+			}
+			$('#selectmvn').click(function() {
+				selectMvnCommand();
+			});
+
+			function selectPomFile() {
+				var pomFileSelector = $('#pomFileSelector');
+				pomFileSelector.change(function(evt) {
+			    	$('#pom').val(pomFileSelector.val());
+			    });
+
+				pomFileSelector.trigger('click');
+			}
+			$('#selectPom').click(function() {
+				selectPomFile();
+			});
+
+			function selectSettingsFile() {
+				var settingsFileSelector = $('#settingsFileSelector');
+				settingsFileSelector.change(function(evt) {
+			    	$('#settings').val(settingsFileSelector.val());
+			    });
+
+				settingsFileSelector.trigger('click');
+			}
+			$('#selectSettings').click(function() {
+				selectSettingsFile();
+			});
 		</script>
 	</body>
 </html>
