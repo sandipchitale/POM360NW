@@ -69,7 +69,7 @@
             settingsFileSelector.trigger('click');
         }
 
-        $scope.runMvn = function() {
+        $scope.runEffectivePom = function() {
             var effectivePomCommand = $('#effective-pom-command');
             if (effectivePomCommand) {
                 effectivePomCommand.val($('#mvn').val() + ' help:effective-pom')
@@ -78,6 +78,12 @@
             if (effectivePom) {
                 effectivePom.val(effectivePom.val() + '\n' + $('#mvn').val() + ' help:effective-pom')
             }
+            return false;
+        }
+
+        $scope.runMvn = function() {
+            $scope.runEffectivePom();
+            return false;
         }
     });
 })();
