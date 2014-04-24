@@ -1,0 +1,9 @@
+{
+	"name": "POM360NW",
+	"main": "POM360.html",
+	"window": {
+	    "toolbar": true,
+	    "width": 1400,
+	    "height": 800
+    }
+}
