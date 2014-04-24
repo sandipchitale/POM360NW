@@ -72,31 +72,34 @@
         }
 
         $scope.runEffectivePom = function() {
+            var pomFile = $('#pom').val();
             var effectivePomCommand = $('#effective-pom-command');
             if (effectivePomCommand) {
-                effectivePomCommand.val($('#mvn').val() + ' help:effective-pom')
+                effectivePomCommand.val($('#mvn').val() + (pomFile ? ' -f ' + pomFile : '') + ' help:effective-pom')
             }
             var effectivePom = $('#effective-pom');
             if (effectivePom) {
-                effectivePom.val(effectivePom.val() + '\n' + $('#mvn').val() + ' help:effective-pom')
+                effectivePom.val(effectivePom.val() + '\n' + $('#mvn').val() + (pomFile ? ' -f ' + pomFile : '') + ' help:effective-pom')
             }
             return false;
         }
 
         $scope.runDependencies = function() {
+            var pomFile = $('#pom').val();
             var dependenciesCommand = $('#dependencies-command');
             if (dependenciesCommand) {
-                dependenciesCommand.val($('#mvn').val() + ' dependency:tree')
+                dependenciesCommand.val($('#mvn').val() + (pomFile ? ' -f ' + pomFile : '') + ' dependency:tree')
             }
             var dependencies = $('#dependencies');
             if (dependencies) {
-                dependencies.val(dependencies.val() + '\n' + $('#mvn').val() + ' dependency:tree')
+                dependencies.val(dependencies.val() + '\n' + $('#mvn').val() + (pomFile ? ' -f ' + pomFile : '') + ' dependency:tree')
             }
             return false;
         }
 
         $scope.runMvn = function() {
             $scope.runEffectivePom();
+            $scope.runDependencies();
             return false;
         }
     });
