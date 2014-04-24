@@ -31,7 +31,7 @@
 						<a href="#"><span class="glyphicon glyphicon-play-circle"></span></a>
 					</li>
 					<li>
-						<a href="#"><span class="glyphicon glyphicon-hdd"></span></a>
+						<a onclick="openThis(pathExtra.homedir() + '/.m2/repository');return false;" href="#"><span class="glyphicon glyphicon-hdd"></span></a>
 					</li>
 					<li>
 						<a href="#"><span class="glyphicon glyphicon-cloud"></span></a>
@@ -40,10 +40,10 @@
 						<a href="#"><span class="glyphicon glyphicon-book"></span></a>
 					</li>
 					<li>
-						<a onclick="openPDF('presentation/MavenM2ETycho.pdf');return false;" href="#"><span class="glyphicon glyphicon-picture"></span></a>
+						<a onclick="openThis('presentation/MavenM2ETycho.pdf');return false;" href="#"><span class="glyphicon glyphicon-picture"></span></a>
 					</li>
 					<li>
-						<a onclick="openPDF('http://books.sonatype.com/mvnref-book/reference/');return false;" href="#"><span class="glyphicon glyphicon-info-sign"></span></a>
+						<a onclick="openThis('http://books.sonatype.com/mvnref-book/reference/');return false;" href="#"><span class="glyphicon glyphicon-info-sign"></span></a>
 					</li>
 					<li class="navbar-right">
 						<a onclick="gui.Window.get().close(true);" href="#"><span class="glyphicon glyphicon-remove-circle"></span></a>
@@ -98,7 +98,7 @@
   					<div class="form-group">
 						<label for="mvn" class="col-sm-1 control-label">mvn</label>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default">
+							<button type="button" class="btn btn-default" onclick="openThis('http://books.sonatype.com/mvnref-book/reference/installation.html');return false;" >
 								<span class="glyphicon glyphicon-info-sign"></span>
 							</button>
 						</div>
@@ -114,7 +114,7 @@
 					<div class="form-group">
 						<label for="options" class="col-sm-1 control-label">Options</label>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default">
+							<button type="button" class="btn btn-default" onclick="openThis('http://books.sonatype.com/mvnref-book/reference/running-sect-options.html');return false;" >
 								<span class="glyphicon glyphicon-info-sign"></span>
 							</button>
 						</div>
@@ -125,7 +125,7 @@
 					<div class="form-group">
 						<label for="pom" class="col-sm-1 control-label">POM</label>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default">
+							<button type="button" class="btn btn-default" onclick="openThis('http://books.sonatype.com/mvnref-book/reference/pom-relationships-sect-pom.html');return false;" >
 								<span class="glyphicon glyphicon-info-sign"></span>
 							</button>
 						</div>
@@ -146,7 +146,7 @@
 					<div class="form-group">
 						<label for="settings" class="col-sm-1 control-label">Settings</label>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default">
+							<button type="button" class="btn btn-default" onclick="openThis('http://books.sonatype.com/mvnref-book/reference/appendix-settings-sect-quick-overview.html');return false;" >
 								<span class="glyphicon glyphicon-info-sign"></span>
 							</button>
 						</div>
@@ -176,7 +176,8 @@
 		<script src="js/angular-ui-router.min.js"></script>
 		<script src="js/POM360.js"></script>
 		<script>
-			var openPDF = require('open');
+			var openThis = require('open');
+			var pathExtra = require('path-extra');
 			var gui = require('nw.gui');
 		</script>
 	</body>
