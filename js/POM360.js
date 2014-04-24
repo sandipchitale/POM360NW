@@ -81,6 +81,18 @@
             return false;
         }
 
+        $scope.runDependencies = function() {
+            var dependenciesCommand = $('#dependencies-command');
+            if (dependenciesCommand) {
+                dependenciesCommand.val($('#mvn').val() + ' dependency:tree')
+            }
+            var dependencies = $('#dependencies');
+            if (dependencies) {
+                dependencies.val(dependencies.val() + '\n' + $('#mvn').val() + ' dependency:tree')
+            }
+            return false;
+        }
+
         $scope.runMvn = function() {
             $scope.runEffectivePom();
             return false;
