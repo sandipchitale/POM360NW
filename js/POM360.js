@@ -26,14 +26,23 @@
             return $rootScope.openThis(pathExtra.homedir() + '/' + relativePathToFile);
         }
     }).controller('POM360Controller', function($scope) {
+        var mvn = $('#mvn');
+        var pom = $('#pom');
+        var settings = $('#settings');
+
         $scope.config = {
             mvnCommand: 'mvn',
             mvnOptions: '',
-            pomFile: path.join(process.cwd(), 'pom.xml'),
-            settingsFile: path.join(pathExtra.homedir(), '.m2', 'settings.xml')
+            pomFile: '',
+            defaultPomFile: path.join(process.cwd(), 'pom.xml'),
+            settingsFile: '',
+            defaultSettingsFile: path.join(pathExtra.homedir(), '.m2', 'settings.xml')
         }
 
-        var mvn = $('#mvn');
+        function cantRun() {
+            return mvn.parent().hasClass('has-error') || pom.parent().hasClass('has-error') || settings.parent().hasClass('has-error');
+        }
+
         function validateMvnCommand() {
             var mvnCommand = mvn.val().trim();
             if (fileSystem.existsSync(mvnCommand)) {
@@ -45,7 +54,6 @@
         validateMvnCommand();
         mvn.on('input', validateMvnCommand);
 
-        var pom = $('#pom');
         function validatePomFile() {
             var pomFile = pom.val().trim();
 
@@ -63,7 +71,6 @@
         validatePomFile();
         pom.on('input', validatePomFile);
 
-        var settings = $('#settings');
         function validateSettingsFile() {
             var settingsFile = settings.val().trim();
 
@@ -94,6 +101,7 @@
         mvnCommandSelector.change(function(evt) {
             $scope.config.mvnCommand = mvnCommandSelector.val();
             $scope.$apply();
+            setTimeout(validateMvnCommand, 0);
         });
         $scope.selectMvnCommand = function() {
             mvnCommandSelector.trigger('click');
@@ -104,6 +112,7 @@
         pomFileSelector.change(function(evt) {
             $scope.config.pomFile = pomFileSelector.val();
             $scope.$apply();
+            setTimeout(validatePomFile, 0);
         });
         $scope.selectPomFile = function() {
             pomFileSelector.trigger('click');
@@ -113,6 +122,7 @@
         settingsFileSelector.change(function(evt) {
             $scope.config.settingsFile = settingsFileSelector.val();
             $scope.$apply();
+            setTimeout(validateSettingsFile, 0);
         });
 
         $scope.selectSettingsFile = function() {
@@ -120,6 +130,9 @@
         }
 
         $scope.runEffectivePom = function() {
+            if (cantRun()) {
+                return;
+            }
             var pomFile = $('#pom').val();
             var effectivePomCommand = $('#effective-pom-command');
             if (effectivePomCommand) {
@@ -133,6 +146,9 @@
         }
 
         $scope.runDependencies = function() {
+            if (cantRun()) {
+                return;
+            }
             var pomFile = $('#pom').val();
             var dependenciesCommand = $('#dependencies-command');
             if (dependenciesCommand) {
