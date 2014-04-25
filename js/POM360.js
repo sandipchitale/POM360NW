@@ -17,6 +17,9 @@
         }).state('dependencies', {
             url : '/dependencies',
             templateUrl : 'templates/dependencies.html'
+        }).state('effective-settings', {
+            url : '/effective-settings',
+            templateUrl : 'templates/effective-settings.html'
         });
     }).run(function($rootScope, $window, $location) {
         $rootScope.openThis = function(fileOrUrl) {
@@ -209,6 +212,36 @@
                             var dependencies = $('#dependencies');
                             if (dependencies) {
                                 runMvnCommand(mvnCommand, pomFile, 'dependency:tree', dependencies);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        $scope.runEffectiveSettings = function() {
+            if (cantRun()) {
+                return;
+            }
+            var mvnCommand = mvn.val();
+            fileSystem.stat(mvnCommand, function(err, stat) {
+                if (err) {
+                    return;
+                }
+                if (stat.isFile()) {
+                    var pomFile = pom.val();
+                    fileSystem.stat(pomFile, function(err, stat) {
+                        if (err) {
+                            return;
+                        }
+                        if (stat.isFile()) {
+                            var effectiveSettingsCommand = $('#effective-settings-command');
+                            if (effectiveSettingsCommand) {
+                                effectiveSettingsCommand.val($('#mvn').val() + (pomFile ? ' -f ' + pomFile : '') + ' help:effective-settings')
+                            }
+                            var effectiveSettings = $('#effective-settings');
+                            if (effectiveSettings) {
+                                runMvnCommand(mvnCommand, pomFile, 'help:effective-settings', effectiveSettings);
                             }
                         }
                     });
