@@ -23,6 +23,9 @@
         }).state('system', {
             url : '/system',
             templateUrl : 'templates/system.html'
+        }).state('usage', {
+            url : '/usage',
+            templateUrl : 'templates/usage.html'
         });
     }).run(function($rootScope, $window, $location) {
         $rootScope.openThis = function(fileOrUrl) {
@@ -48,6 +51,10 @@
 
         $scope.atSystemTab = function() {
             return ($location.path() === '/system');
+        }
+
+        $scope.atUsageTab = function() {
+            return ($location.path() === '/usage');
         }
 
         $scope.config = {
@@ -296,6 +303,31 @@
                             }
                         }
                     });
+                }
+            });
+        }
+
+        $scope.runUsage = function() {
+            if (mvn.parent().hasClass('has-error')) {
+                return;
+            }
+            var mvnCommand = mvn.val();
+            fileSystem.stat(mvnCommand, function(err, stat) {
+                if (err) {
+                    return;
+                }
+                if (stat.isFile()) {
+
+                    if (stat.isFile()) {
+                        var usageCommand = $('#usage-command');
+                        if (usageCommand) {
+                            usageCommand.val($('#mvn').val() + ' -h')
+                        }
+                        var usage = $('#usage');
+                        if (usage) {
+                            runMvnCommand(mvnCommand, null, '-h', usage);
+                        }
+                    }
                 }
             });
         }
