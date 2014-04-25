@@ -1,0 +1,18 @@
+<form class="form-horizontal" role="form">
+	<div class="form-group">
+		<div class="col-sm-5">
+			<input type="text" class="form-control mono" id="mvn-command" placeholder="mvn" readonly/>
+		</div>
+		<div class="col-sm-6">
+			<input ng-model="cli.args" type="text" class="form-control mono" id="cli-args" placeholder="-h"/>
+		</div>
+		<div class="col-sm-1">
+			<button ng-click="runCliArgs()" class="btn btn-default btn-block"><span class="glyphicon glyphicon-play-circle"></span></button>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-12">
+			<textarea class="form-control mono" id="cli-args-output" rows="16" readonly></textarea>
+		</div>
+	</div>
+</form>

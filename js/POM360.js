@@ -23,9 +23,9 @@
         }).state('system', {
             url : '/system',
             templateUrl : 'templates/system.html'
-        }).state('usage', {
-            url : '/usage',
-            templateUrl : 'templates/usage.html'
+        }).state('cliargs', {
+            url : '/cliargs',
+            templateUrl : 'templates/cliargs.html'
         });
     }).run(function($rootScope, $window, $location) {
         $rootScope.openThis = function(fileOrUrl) {
@@ -53,8 +53,8 @@
             return ($location.path() === '/system');
         }
 
-        $scope.atUsageTab = function() {
-            return ($location.path() === '/usage');
+        $scope.atRunTab = function() {
+            return ($location.path() === '/cliargs');
         }
 
         $scope.config = {
@@ -64,6 +64,10 @@
             defaultPomFile: path.join(process.cwd(), 'pom.xml'),
             settingsFile: '',
             defaultSettingsFile: path.join(pathExtra.homedir(), '.m2', 'settings.xml')
+        }
+
+        $scope.cli = {
+            args: "-h"
         }
 
         var mvn = $('#mvn');
@@ -205,7 +209,7 @@
                         if (stat.isFile()) {
                             var effectivePomCommand = $('#effective-pom-command');
                             if (effectivePomCommand) {
-                                effectivePomCommand.val($('#mvn').val() + (pomFile ? ' -f ' + pomFile : '') + ' help:effective-pom')
+                                effectivePomCommand.val(mvn.val() + (pomFile ? ' -f ' + pomFile : '') + ' help:effective-pom')
                             }
                             var effectivePom = $('#effective-pom');
                             if (effectivePom) {
@@ -235,7 +239,7 @@
                         if (stat.isFile()) {
                             var dependenciesCommand = $('#dependencies-command');
                             if (dependenciesCommand) {
-                                dependenciesCommand.val($('#mvn').val() + (pomFile ? ' -f ' + pomFile : '') + ' dependency:tree')
+                                dependenciesCommand.val(mvn.val() + (pomFile ? ' -f ' + pomFile : '') + ' dependency:tree')
                             }
                             var dependencies = $('#dependencies');
                             if (dependencies) {
@@ -265,7 +269,7 @@
                         if (stat.isFile()) {
                             var effectiveSettingsCommand = $('#effective-settings-command');
                             if (effectiveSettingsCommand) {
-                                effectiveSettingsCommand.val($('#mvn').val() + (pomFile ? ' -f ' + pomFile : '') + ' help:effective-settings')
+                                effectiveSettingsCommand.val(mvn.val() + (pomFile ? ' -f ' + pomFile : '') + ' help:effective-settings')
                             }
                             var effectiveSettings = $('#effective-settings');
                             if (effectiveSettings) {
@@ -295,7 +299,7 @@
                         if (stat.isFile()) {
                             var systemCommand = $('#system-command');
                             if (systemCommand) {
-                                systemCommand.val($('#mvn').val() + (pomFile ? ' -f ' + pomFile : '') + ' help:system')
+                                systemCommand.val(mvn.val() + (pomFile ? ' -f ' + pomFile : '') + ' help:system')
                             }
                             var system = $('#system');
                             if (system) {
@@ -307,7 +311,7 @@
             });
         }
 
-        $scope.runUsage = function() {
+        $scope.runCliArgs = function() {
             if (mvn.parent().hasClass('has-error')) {
                 return;
             }
@@ -317,17 +321,19 @@
                     return;
                 }
                 if (stat.isFile()) {
-
-                    if (stat.isFile()) {
-                        var usageCommand = $('#usage-command');
-                        if (usageCommand) {
-                            usageCommand.val($('#mvn').val() + ' -h')
-                        }
-                        var usage = $('#usage');
-                        if (usage) {
-                            runMvnCommand(mvnCommand, null, '-h', usage);
-                        }
+                    var mvnCommandInput = $('#mvnCommand');
+                    if (mvnCommandInput) {
+                        mvnCommandInput.val(mvn.val())
                     }
+
+                    var pomFile;
+                    if (!pom.parent().hasClass('has-error')) {
+                            pomFile - pom.val();
+                    }
+
+                    var cliArgsOutput = $('#cli-args-output');
+
+                    runMvnCommand(mvnCommand, null, $scope.cli.args, cliArgsOutput);
                 }
             });
         }
