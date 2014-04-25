@@ -215,11 +215,5 @@
                 }
             });
         }
-
-        $scope.runMvn = function() {
-            $scope.runEffectivePom();
-            $scope.runDependencies();
-            return false;
-        }
     });
 })();

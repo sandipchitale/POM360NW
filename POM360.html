@@ -28,9 +28,6 @@
 			<div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
 				<ul style="-webkit-app-region: no-drag;" class="nav navbar-nav pull-right">
 					<li>
-						<a ng-click="runMvn()" href="#"><span class="glyphicon glyphicon-play-circle"></span></a>
-					</li>
-					<li>
 						<a ng-click="openThisRelativeToHomeDir('.m2/repository')" href="#"><span class="glyphicon glyphicon-hdd"></span></a>
 					</li>
 					<li>
@@ -79,25 +76,31 @@
 		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 			<div class="container-fluid">
 				<br/>
-				<form class="form-inline" role="form">
-					<div class="form-group">
-						<label class="sr-only" for="search">Search</label>
-						<input type="search" class="form-control" id="search" placeholder="Search text">
-					</div>
-					<button type="button" class="btn btn-default">
-						<span class="glyphicon glyphicon-search"></span>
-					</button>
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" /> a != A
-							</label>
-					</div>
-					<button type="button" class="btn btn-default pull-right">
-						<span class="glyphicon glyphicon-arrow-down"></span>
-					</button>
-				</form>
-				<br/>
 				<form class="form-horizontal" role="form">
+  					<div class="form-group">
+						<label for="search" class="col-sm-1 control-label">Find</label>
+						<div class="col-sm-1 ">
+							<div class="checkbox text-center">
+								<label>
+									<input type="checkbox" /> a != A
+								</label>
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<label class="sr-only" for="search">Find</label>
+							<input type="search" class="form-control" id="search" placeholder="Find string...">
+						</div>
+						<div class="col-sm-1">
+							<button type="button" class="btn btn-default btn-block">
+								<span class="glyphicon glyphicon-search"></span>
+							</button>
+						</div>
+						<div class="col-sm-1">
+							<button type="button" class="btn btn-default btn-block">
+								<span class="glyphicon glyphicon-arrow-down"></span>
+							</button>
+						</div>
+					</div>
   					<div class="form-group">
 						<label for="mvn" class="col-sm-1 control-label">mvn</label>
 						<div class="col-sm-1">
@@ -105,7 +108,7 @@
 								<span class="glyphicon glyphicon-info-sign"></span>
 							</button>
 						</div>
-						<div class="col-sm-9">
+						<div class="col-sm-8">
 							<input type="text" class="form-control" id="mvn" placeholder="mvn command" ng-model="config.mvnCommand"></input>
 						</div>
 						<div class="col-sm-1">
@@ -122,7 +125,7 @@
 								<span class="glyphicon glyphicon-info-sign"></span>
 							</button>
 						</div>
-						<div class="col-sm-9">
+						<div class="col-sm-8">
 							<input type="text" class="form-control" id="options" placeholder="mvn options" ng-model="config.mvnOptions"></input>
 						</div>
 					</div>
@@ -137,15 +140,15 @@
 							<input type="text" class="form-control" id="pom" placeholder="{{config.defaultPomFile}}" ng-model="config.pomFile"></input>
 						</div>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default btn-block">
-								<span class="glyphicon glyphicon-pencil"></span>
-							</button>
-						</div>
-						<div class="col-sm-1">
 							<button ng-click="selectPomFile()" type="button" class="btn btn-default btn-block" id="selectPom">
 								<span class="glyphicon glyphicon-floppy-open"></span>
 							</button>
 							<input style="display: none;" id="pomFileSelector" type="file" accept=".xml"/>
+						</div>
+						<div class="col-sm-1">
+							<button type="button" class="btn btn-default btn-block">
+								<span class="glyphicon glyphicon-pencil"></span>
+							</button>
 						</div>
 					</div>
 					<div class="form-group">
@@ -159,15 +162,15 @@
 							<input type="text" class="form-control" id="settings" placeholder="{{config.defaultSettingsFile}}" ng-model="config.settingsFile"></input>
 						</div>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default btn-block">
-								<span class="glyphicon glyphicon-pencil"></span>
-							</button>
-						</div>
-						<div class="col-sm-1">
 							<button ng-click="selectSettingsFile()" type="button" class="btn btn-default btn-block" id="selectSettings">
 								<span class="glyphicon glyphicon-floppy-open"></span>
 							</button>
 							<input style="display: none;" id="settingsFileSelector" type="file" accept=".xml"/>
+						</div>
+						<div class="col-sm-1">
+							<button type="button" class="btn btn-default btn-block">
+								<span class="glyphicon glyphicon-pencil"></span>
+							</button>
 						</div>
 					</div>
 				</form>
