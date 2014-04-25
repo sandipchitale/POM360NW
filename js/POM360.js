@@ -20,6 +20,9 @@
         }).state('effective-settings', {
             url : '/effective-settings',
             templateUrl : 'templates/effective-settings.html'
+        }).state('system', {
+            url : '/system',
+            templateUrl : 'templates/system.html'
         });
     }).run(function($rootScope, $window, $location) {
         $rootScope.openThis = function(fileOrUrl) {
@@ -37,6 +40,14 @@
 
         $scope.atDependenciesTab = function() {
             return ($location.path() === '/dependencies');
+        }
+
+        $scope.atEffectiveSettingsTab = function() {
+            return ($location.path() === '/effective-settings');
+        }
+
+        $scope.atSystemTab = function() {
+            return ($location.path() === '/system');
         }
 
         $scope.config = {
@@ -137,11 +148,21 @@
             settingsFileSelector.trigger('click');
         }
 
-        function runMvnCommand(mvnCommand, pomFile, command, textArea) {
+        function runMvnCommand(mvnCommand, pomFile, commands, textArea) {
             textArea.val('');
             var pomDir = path.dirname(pomFile);
+            var args = ['-B'];
+            if (pomFile) {
+                args.push('-f');
+                args.push(pomFile);
+            }
+            if ($.isArray(commands)) {
+                args = args.concat(commands);
+            } else if ((typeof commands) === 'string') {
+                args = args.concat(commands.split('\\s+'));
+            }
             var mvnProcess = childProcess.spawn(mvnCommand,
-                ['-B', '-f', pomFile, command],
+                args,
                 {
                     cwd: pomDir,
                     env: process.env
@@ -248,5 +269,36 @@
                 }
             });
         }
+
+        $scope.runSystem = function() {
+            if (cantRun()) {
+                return;
+            }
+            var mvnCommand = mvn.val();
+            fileSystem.stat(mvnCommand, function(err, stat) {
+                if (err) {
+                    return;
+                }
+                if (stat.isFile()) {
+                    var pomFile = pom.val();
+                    fileSystem.stat(pomFile, function(err, stat) {
+                        if (err) {
+                            return;
+                        }
+                        if (stat.isFile()) {
+                            var systemCommand = $('#system-command');
+                            if (systemCommand) {
+                                systemCommand.val($('#mvn').val() + (pomFile ? ' -f ' + pomFile : '') + ' help:system')
+                            }
+                            var system = $('#system');
+                            if (system) {
+                                runMvnCommand(mvnCommand, pomFile, 'help:system', system);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
     });
 })();
