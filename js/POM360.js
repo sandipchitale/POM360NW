@@ -1,5 +1,6 @@
 (function() {
     var path = require('path');
+    var fileSystem = require('fs');
     var pathExtra = require('path-extra');
     var gui = require('nw.gui');
     var openThis = require('open');
@@ -29,8 +30,55 @@
             mvnCommand: 'mvn',
             mvnOptions: '',
             pomFile: path.join(process.cwd(), 'pom.xml'),
-            settingsFile: '~/.m2/settings.xml'
+            settingsFile: path.join(pathExtra.homedir(), '.m2', 'settings.xml')
         }
+
+        var mvn = $('#mvn');
+        function validateMvnCommand() {
+            var mvnCommand = mvn.val().trim();
+            if (fileSystem.existsSync(mvnCommand)) {
+                mvn.parent().removeClass('has-error');
+            } else {
+                mvn.parent().addClass('has-error');
+            }
+        }
+        validateMvnCommand();
+        mvn.on('input', validateMvnCommand);
+
+        var pom = $('#pom');
+        function validatePomFile() {
+            var pomFile = pom.val().trim();
+
+            if (pomFile === '') {
+                pom.parent().removeClass('has-error');
+                return;
+            }
+
+            if (fileSystem.existsSync(pomFile)) {
+                pom.parent().removeClass('has-error');
+            } else {
+                pom.parent().addClass('has-error');
+            }
+        }
+        validatePomFile();
+        pom.on('input', validatePomFile);
+
+        var settings = $('#settings');
+        function validateSettingsFile() {
+            var settingsFile = settings.val().trim();
+
+            if (settingsFile === '') {
+                settings.parent().removeClass('has-error');
+                return;
+            }
+            if (fileSystem.existsSync(settingsFile)) {
+                settings.parent().removeClass('has-error');
+            } else {
+                settings.parent().addClass('has-error');
+            }
+        }
+        validateSettingsFile();
+        settings.on('input', validateSettingsFile);
 
         $scope.debug = function() {
             gui.Window.get().showDevTools();
