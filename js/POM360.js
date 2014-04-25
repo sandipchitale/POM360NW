@@ -1,6 +1,7 @@
 (function() {
     var path = require('path');
     var fileSystem = require('fs');
+    var childProcess = require('child_process');
     var pathExtra = require('path-extra');
     var gui = require('nw.gui');
     var openThis = require('open');
@@ -56,11 +57,6 @@
 
         function validatePomFile() {
             var pomFile = pom.val().trim();
-
-            if (pomFile === '') {
-                pom.parent().removeClass('has-error');
-                return;
-            }
 
             if (fileSystem.existsSync(pomFile)) {
                 pom.parent().removeClass('has-error');
@@ -133,23 +129,56 @@
             if (cantRun()) {
                 return;
             }
-            var pomFile = $('#pom').val();
-            var effectivePomCommand = $('#effective-pom-command');
-            if (effectivePomCommand) {
-                effectivePomCommand.val($('#mvn').val() + (pomFile ? ' -f ' + pomFile : '') + ' help:effective-pom')
-            }
-            var effectivePom = $('#effective-pom');
-            if (effectivePom) {
-                effectivePom.val(effectivePom.val() + '\n' + $('#mvn').val() + (pomFile ? ' -f ' + pomFile : '') + ' help:effective-pom')
-            }
-            return false;
+            var mvnCommand = mvn.val();
+            fileSystem.stat(mvnCommand, function(err, stat) {
+                if (err) {
+                    return;
+                }
+                if (stat.isFile()) {
+                    var pomFile = pom.val();
+                    fileSystem.stat(pomFile, function(err, stat) {
+                        if (err) {
+                            return;
+                        }
+                        if (stat.isFile()) {
+                            var effectivePomCommand = $('#effective-pom-command');
+                            if (effectivePomCommand) {
+                                effectivePomCommand.val($('#mvn').val() + (pomFile ? ' -f ' + pomFile : '') + ' help:effective-pom')
+                            }
+                            var effectivePom = $('#effective-pom');
+                            if (effectivePom) {
+                                effectivePom.val('');
+
+                                var pomDir = path.dirname(pomFile);
+                                var effectivePomProcess = childProcess.spawn(mvnCommand,
+                                    ['-B', '-f', pomFile, 'help:effective-pom'],
+                                    {
+                                        cwd: pomDir,
+                                        env: process.env
+                                    });
+
+                                effectivePomProcess.stdout.on('data', function (data) {
+                                    effectivePom.val(effectivePom.val() + data);
+                                });
+
+                                effectivePomProcess.stderr.on('data', function (data) {
+                                    effectivePom.val(effectivePom.val() + data);
+                                });
+
+                                effectivePomProcess.on('close', function (code) {
+                                });
+                            }
+                        }
+                    });
+                }
+            });
         }
 
         $scope.runDependencies = function() {
             if (cantRun()) {
                 return;
             }
-            var pomFile = $('#pom').val();
+            var pomFile = pom.val();
             var dependenciesCommand = $('#dependencies-command');
             if (dependenciesCommand) {
                 dependenciesCommand.val($('#mvn').val() + (pomFile ? ' -f ' + pomFile : '') + ' dependency:tree')
