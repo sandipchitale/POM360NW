@@ -21,12 +21,12 @@
 		<nav style="-webkit-app-region: drag;" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div style="-webkit-app-region: no-drag;" class="navbar-header">
-				<a class="navbar-brand" href="#"><img style="vertical-align: middle" src="icons/POM360.png"/> POM 360</a>
+				<a class="navbar-brand" href="#"><img style="vertical-align: middle" src="icons/POM360.png"/>  POM 360</a>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
-				<ul style="-webkit-app-region: no-drag;" class="nav navbar-nav">
+				<ul style="-webkit-app-region: no-drag;" class="nav navbar-nav pull-right">
 					<li>
 						<a ng-click="runMvn()" href="#"><span class="glyphicon glyphicon-play-circle"></span></a>
 					</li>
@@ -45,7 +45,10 @@
 					<li>
 						<a ng-click="openThis('http://books.sonatype.com/mvnref-book/reference/')" href="#"><span class="glyphicon glyphicon-info-sign"></span></a>
 					</li>
-					<li class="navbar-right">
+					<li>
+						<a ng-click="debug()" href="#"><span class="glyphicon glyphicon-eye-open"></span></a>
+					</li>
+					<li>
 						<a ng-click="exit()" href="#"><span class="glyphicon glyphicon-remove-circle"></span></a>
 					</li>
 				</ul>
@@ -55,10 +58,10 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<ul class="nav nav-tabs">
-						<li class="active">
+						<li ng-class="{active : atEffectivePomTab()}">
 							<a href="#/effective-pom">Effective POM</a>
 						</li>
-						<li>
+						<li ng-class="{active : atDependenciesTab()}">
 							<a href="#/dependencies">Dependencies</a>
 						</li>
 					</ul>
@@ -92,16 +95,13 @@
 					<button type="button" class="btn btn-default pull-right">
 						<span class="glyphicon glyphicon-arrow-down"></span>
 					</button>
-					<button ng-click="debug()" type="button" class="btn btn-default pull-right">
-						<span class="glyphicon glyphicon-eye-open"></span>
-					</button>
 				</form>
 				<br/>
 				<form class="form-horizontal" role="form">
   					<div class="form-group">
 						<label for="mvn" class="col-sm-1 control-label">mvn</label>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default" ng-click="openThis('http://books.sonatype.com/mvnref-book/reference/installation.html')" >
+							<button type="button" class="btn btn-default btn-block" ng-click="openThis('http://books.sonatype.com/mvnref-book/reference/installation.html')" >
 								<span class="glyphicon glyphicon-info-sign"></span>
 							</button>
 						</div>
@@ -109,7 +109,7 @@
 							<input type="text" class="form-control" id="mvn" placeholder="mvn command" ng-model="config.mvnCommand"></input>
 						</div>
 						<div class="col-sm-1">
-							<button ng-click="selectMvnCommand()" type="button" class="btn btn-default pull-right" id="selectmvn">
+							<button ng-click="selectMvnCommand()" type="button" class="btn btn-default btn-block" id="selectmvn">
 								<span class="glyphicon glyphicon-floppy-open"></span>
 							</button>
 							<input style="display: none;" id="mvnCommandSelector" type="file" />
@@ -118,7 +118,7 @@
 					<div class="form-group">
 						<label for="options" class="col-sm-1 control-label">Options</label>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default" ng-click="openThis('http://books.sonatype.com/mvnref-book/reference/running-sect-options.html')" >
+							<button type="button" class="btn btn-default btn-block" ng-click="openThis('http://books.sonatype.com/mvnref-book/reference/running-sect-options.html')" >
 								<span class="glyphicon glyphicon-info-sign"></span>
 							</button>
 						</div>
@@ -129,7 +129,7 @@
 					<div class="form-group">
 						<label for="pom" class="col-sm-1 control-label">POM</label>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default" ng-click="openThis('http://books.sonatype.com/mvnref-book/reference/pom-relationships-sect-pom.html')" >
+							<button type="button" class="btn btn-default btn-block" ng-click="openThis('http://books.sonatype.com/mvnref-book/reference/pom-relationships-sect-pom.html')" >
 								<span class="glyphicon glyphicon-info-sign"></span>
 							</button>
 						</div>
@@ -137,12 +137,12 @@
 							<input type="text" class="form-control" id="pom" placeholder="{{config.defaultPomFile}}" ng-model="config.pomFile"></input>
 						</div>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default pull-right">
+							<button type="button" class="btn btn-default btn-block">
 								<span class="glyphicon glyphicon-pencil"></span>
 							</button>
 						</div>
 						<div class="col-sm-1">
-							<button ng-click="selectPomFile()" type="button" class="btn btn-default pull-right" id="selectPom">
+							<button ng-click="selectPomFile()" type="button" class="btn btn-default btn-block" id="selectPom">
 								<span class="glyphicon glyphicon-floppy-open"></span>
 							</button>
 							<input style="display: none;" id="pomFileSelector" type="file" accept=".xml"/>
@@ -151,7 +151,7 @@
 					<div class="form-group">
 						<label for="settings" class="col-sm-1 control-label">Settings</label>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default" ng-click="openThis('http://books.sonatype.com/mvnref-book/reference/appendix-settings-sect-quick-overview.html')" >
+							<button type="button" class="btn btn-default btn-block" ng-click="openThis('http://books.sonatype.com/mvnref-book/reference/appendix-settings-sect-quick-overview.html')" >
 								<span class="glyphicon glyphicon-info-sign"></span>
 							</button>
 						</div>
@@ -159,12 +159,12 @@
 							<input type="text" class="form-control" id="settings" placeholder="{{config.defaultSettingsFile}}" ng-model="config.settingsFile"></input>
 						</div>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default pull-right">
+							<button type="button" class="btn btn-default btn-block">
 								<span class="glyphicon glyphicon-pencil"></span>
 							</button>
 						</div>
 						<div class="col-sm-1">
-							<button ng-click="selectSettingsFile()" type="button" class="btn btn-default pull-right" id="selectSettings">
+							<button ng-click="selectSettingsFile()" type="button" class="btn btn-default btn-block" id="selectSettings">
 								<span class="glyphicon glyphicon-floppy-open"></span>
 							</button>
 							<input style="display: none;" id="settingsFileSelector" type="file" accept=".xml"/>

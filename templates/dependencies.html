@@ -1,15 +1,15 @@
 <form class="form-horizontal" role="form">
 	<div class="form-group">
 		<div class="col-sm-11">
-			<input type="text" class="form-control" id="dependencies-command" placeholder="mvn dependency:tree" readonly/>
+			<input type="text" class="form-control mono" id="dependencies-command" placeholder="mvn dependency:tree" readonly/>
 		</div>
 		<div class="col-sm-1">
-			<button ng-click="runDependencies()" class="btn btn-default pull-right"><span class="glyphicon glyphicon-play-circle"></span></button>
+			<button ng-click="runDependencies()" class="btn btn-default btn-block"><span class="glyphicon glyphicon-play-circle"></span></button>
 		</div>
 	</div>
 	<div class="form-group">
 		<div class="col-sm-12">
-			<textarea class="form-control" id="dependencies" rows="14" readonly></textarea>
+			<textarea class="form-control mono" id="dependencies" rows="14" readonly></textarea>
 		</div>
 	</div>
 </form>
