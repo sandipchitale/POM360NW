@@ -8,7 +8,7 @@
 		"toolbar": false,
 		"icon": "icons/POM360.png",
 		"frame": false,
-		"width": 1400,
+		"width": 1000,
 		"height": 800
 	}
 }
