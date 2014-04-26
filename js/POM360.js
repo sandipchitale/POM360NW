@@ -195,9 +195,11 @@
 
         var settingsFileSelector = $('#settingsFileSelector');
         settingsFileSelector.change(function(evt) {
-            $scope.config.settingsFile = settingsFileSelector.val();
-            $scope.$apply();
-            setTimeout(validateSettingsFile, 0);
+            if ('' !== settingsFileSelector.val().trim()) {
+                $scope.config.settingsFile = settingsFileSelector.val().trim();
+                $scope.$apply();
+                setTimeout(validateSettingsFile, 0);
+            }
         });
 
         $scope.selectSettingsFile = function() {
