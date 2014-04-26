@@ -5,3 +5,7 @@ body {
 .mono {
 	font-family: Menlo, Monaco, Consolas, "Courier New", monospace !important;
 }
+
+.busy {
+	cursor: wait !important;
+}

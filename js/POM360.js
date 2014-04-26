@@ -196,6 +196,7 @@
 
         function runMvnCommand(mvnCommand, pomFile, commands, textArea) {
             textArea.val('');
+            $(textArea).addClass('busy');
             var pomDir = path.dirname(pomFile);
             var args = ['-B'];
             if (pomFile) {
@@ -223,6 +224,7 @@
             });
 
             mvnProcess.on('close', function (code) {
+                 $(textArea).removeClass('busy');
             });
         }
 
