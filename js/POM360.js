@@ -17,6 +17,9 @@
         }).state('dependencies', {
             url : '/dependencies',
             templateUrl : 'templates/dependencies.html'
+        }).state('agenda', {
+            url : '/agenda',
+            templateUrl : 'templates/agenda.html'
         }).state('effective-settings', {
             url : '/effective-settings',
             templateUrl : 'templates/effective-settings.html'
@@ -43,6 +46,10 @@
 
         $scope.atDependenciesTab = function() {
             return ($location.path() === '/dependencies');
+        }
+
+        $scope.atAgendaTab = function() {
+            return ($location.path() === '/agenda');
         }
 
         $scope.atEffectiveSettingsTab = function() {
@@ -251,6 +258,43 @@
             });
         }
 
+        $scope.runAgenda = function() {
+            if (cantRun()) {
+                return;
+            }
+            var mvnCommand = mvn.val();
+            fileSystem.stat(mvnCommand, function(err, stat) {
+                if (err) {
+                    return;
+                }
+                if (stat.isFile()) {
+                    var pomFile = pom.val();
+                    fileSystem.stat(pomFile, function(err, stat) {
+                        if (err) {
+                            return;
+                        }
+                        if (stat.isFile()) {
+                            var agendaCommand = $('#agenda-command');
+                            if (agendaCommand) {
+                                agendaCommand.val(mvn.val() + (pomFile ? ' -f ' + pomFile : '') + ' help:describe -Dcmd=clean -Dcmd=deploy -Dcmd=site')
+                            }
+                            var cleanAgenda = $('#clean-agenda');
+                            if (cleanAgenda) {
+                                runMvnCommand(mvnCommand, pomFile, ['help:describe', '-Dcmd=clean'], cleanAgenda);
+                            }
+                            var deployAgenda = $('#deploy-agenda');
+                            if (deployAgenda) {
+                                runMvnCommand(mvnCommand, pomFile, ['help:describe', '-Dcmd=deploy'], deployAgenda);
+                            }
+                            var siteAgenda = $('#site-agenda');
+                            if (siteAgenda) {
+                                runMvnCommand(mvnCommand, pomFile, ['help:describe', '-Dcmd=site'], siteAgenda);
+                            }
+                        }
+                    });
+                }
+            });
+        }
         $scope.runEffectiveSettings = function() {
             if (cantRun()) {
                 return;

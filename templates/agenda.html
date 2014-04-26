@@ -1,0 +1,32 @@
+<form class="form-horizontal" role="form">
+	<div class="form-group">
+		<div class="col-sm-11">
+			<input type="text" class="form-control mono" id="agenda-command" placeholder="mvn help:describe -Dcmd=clean -Dcmd=deploy -Dcmd=site" readonly/>
+		</div>
+		<div class="col-sm-1">
+			<button ng-click="runAgenda()" class="btn btn-default btn-block"><span class="glyphicon glyphicon-play-circle"></span></button>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-4">
+			clean
+		</div>
+		<div class="col-sm-4">
+			deploy
+		</div>
+		<div class="col-sm-4">
+			site
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-4">
+			<textarea class="form-control mono" id="clean-agenda" rows="14" readonly></textarea>
+		</div>
+		<div class="col-sm-4">
+			<textarea class="form-control mono" id="deploy-agenda" rows="14" readonly></textarea>
+		</div>
+		<div class="col-sm-4">
+			<textarea class="form-control mono" id="site-agenda" rows="14" readonly></textarea>
+		</div>
+	</div>
+</form>
