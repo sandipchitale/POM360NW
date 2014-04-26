@@ -206,7 +206,7 @@
             settingsFileSelector.trigger('click');
         }
 
-        function runMvnCommand(mvnCommand, pomFile, commands, textArea) {
+        function runMvnCommand(mvnCommand, pomFile, commands, textArea, filters) {
             textArea.val('');
             $(textArea).addClass('busy');
             var pomDir = path.dirname(pomFile);
@@ -236,7 +236,16 @@
             });
 
             mvnProcess.on('close', function (code) {
-                 $(textArea).removeClass('busy');
+                if (code === 0) {
+                    if (filters) {
+                        var val = $(textArea).val();
+                        for (var i = 0; i < filters.length; i++) {
+                            val = val.replace(filters[i].searchValue, filters[i].replaceValue);
+                        }
+                        $(textArea).val(val);
+                    }
+                }
+                $(textArea).removeClass('busy');
             });
         }
 
@@ -262,7 +271,7 @@
                             }
                             var effectivePom = $('#effective-pom');
                             if (effectivePom) {
-                                runMvnCommand(mvnCommand, pomFile, 'help:effective-pom', effectivePom);
+                                runMvnCommand(mvnCommand, pomFile, 'help:effective-pom', effectivePom, [{searchValue: /\[INFO\].+\n/g, replaceValue: ''}]);
                             }
                         }
                     });
@@ -292,7 +301,14 @@
                             }
                             var dependencies = $('#dependencies');
                             if (dependencies) {
-                                runMvnCommand(mvnCommand, pomFile, 'dependency:tree', dependencies);
+                                runMvnCommand(mvnCommand, pomFile, 'dependency:tree', dependencies
+                                ,[
+                                {searchValue: /(\n|\r|.)*\[INFO\] --- maven-dependency-plugin.+\n/gm, replaceValue: ''}
+                                ,{searchValue: /^\[INFO\] BUILD SUCCESS(\n|\r|.)*/gm, replaceValue: ''}
+                                ,{searchValue: /^\[INFO\] -------------------------(\n|\r|.)*/gm, replaceValue: ''}
+                                ,{searchValue: /^\[INFO\]\s+/gm, replaceValue: ''}
+                                ]
+                               );
                             }
                         }
                     });
@@ -322,21 +338,25 @@
                             }
                             var cleanAgenda = $('#clean-agenda');
                             if (cleanAgenda) {
-                                runMvnCommand(mvnCommand, pomFile, ['help:describe', '-Dcmd=clean'], cleanAgenda);
+                                runMvnCommand(mvnCommand, pomFile, ['help:describe', '-Dcmd=clean'], cleanAgenda,
+                                [{searchValue: /\[INFO\].+\n/g, replaceValue: ''}]);
                             }
                             var deployAgenda = $('#deploy-agenda');
                             if (deployAgenda) {
-                                runMvnCommand(mvnCommand, pomFile, ['help:describe', '-Dcmd=deploy'], deployAgenda);
+                                runMvnCommand(mvnCommand, pomFile, ['help:describe', '-Dcmd=deploy'], deployAgenda,
+                                [{searchValue: /\[INFO\].+\n/g, replaceValue: ''}]);
                             }
                             var siteAgenda = $('#site-agenda');
                             if (siteAgenda) {
-                                runMvnCommand(mvnCommand, pomFile, ['help:describe', '-Dcmd=site'], siteAgenda);
+                                runMvnCommand(mvnCommand, pomFile, ['help:describe', '-Dcmd=site'], siteAgenda,
+                                [{searchValue: /\[INFO\].+\n/g, replaceValue: ''}]);
                             }
                         }
                     });
                 }
             });
         }
+
         $scope.runEffectiveSettings = function() {
             if (cantRun()) {
                 return;
@@ -359,7 +379,7 @@
                             }
                             var effectiveSettings = $('#effective-settings');
                             if (effectiveSettings) {
-                                runMvnCommand(mvnCommand, pomFile, 'help:effective-settings', effectiveSettings);
+                                runMvnCommand(mvnCommand, pomFile, 'help:effective-settings', effectiveSettings, [{searchValue: /\[INFO\].+\n/g, replaceValue: ''}]);
                             }
                         }
                     });
@@ -389,7 +409,7 @@
                             }
                             var system = $('#system');
                             if (system) {
-                                runMvnCommand(mvnCommand, pomFile, 'help:system', system);
+                                runMvnCommand(mvnCommand, pomFile, 'help:system', system, [{searchValue: /\[INFO\].+\n/g, replaceValue: ''}]);
                             }
                         }
                     });
@@ -452,7 +472,7 @@
                     if (describePlugin) {
                         runMvnCommand(mvnCommand, pomFile,
                             ['help:describe', '-Ddetail', '-Dplugin=' + $scope.plugin.gid + ':' + $scope.plugin.aid],
-                            describePlugin);
+                            describePlugin, [{searchValue: /\[INFO\].+\n/g, replaceValue: ''}]);
                     }
                 }
             });
