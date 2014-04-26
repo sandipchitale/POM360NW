@@ -1,5 +1,6 @@
 *.class
 *.pyc
 *.pyo
+dist/
 POM360NW.nw
 
