@@ -1,0 +1,41 @@
+<form class="form-horizontal" role="form">
+	<div class="form-group">
+		<div class="col-sm-11">
+			<input type="text" class="form-control mono" id="describe-plugin-command" placeholder="mvn help:describe -Ddetail -Dplugin=G:A" readonly/>
+		</div>
+		<div class="col-sm-1">
+			<button ng-click="runDescribePlugin()" class="btn btn-default btn-block"><span class="glyphicon glyphicon-play-circle"></span></button>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-6">
+			<div class="input-group">
+				<input type="text" class="form-control" ng-model="plugin.gid">
+				<div class="input-group-btn">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu pull-right" style="background-color: white !important;">
+						<li ng-repeat="gid in plugin.gids"><button class="btn btn-link" ng-click="setGid(gid)">{{gid}}</button></li>
+					</ul>
+				</div><!-- /btn-group -->
+			</div><!-- /input-group -->
+		</div>
+		<div class="col-sm-6">
+			<div class="input-group">
+				<input type="text" class="form-control" ng-model="plugin.aid">
+				<div class="input-group-btn">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu pull-right" style="background-color: white !important;">
+						<li ng-repeat="aid in plugin.aids"><button class="btn btn-link" ng-click="setAid(aid)">{{aid}}</button></li>
+					</ul>
+				</div><!-- /btn-group -->
+			</div><!-- /input-group -->
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-12">
+			<textarea class="form-control mono" id="describe-plugin" rows="15" readonly></textarea>
+		</div>
+	</div>
+</form>

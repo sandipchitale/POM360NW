@@ -29,6 +29,9 @@
         }).state('cliargs', {
             url : '/cliargs',
             templateUrl : 'templates/cliargs.html'
+        }).state('describe-plugin', {
+            url : '/describe-plugin',
+            templateUrl : 'templates/describe-plugin.html'
         });
     }).run(function($rootScope, $window, $location) {
         $rootScope.openThis = function(fileOrUrl) {
@@ -64,6 +67,10 @@
             return ($location.path() === '/cliargs');
         }
 
+        $scope.atDescribePluginTab = function() {
+            return ($location.path() === '/describe-plugin');
+        }
+
         $scope.config = {
             mvnCommand: 'mvn',
             mvnOptions: '',
@@ -75,6 +82,27 @@
 
         $scope.cli = {
             args: "-h"
+        }
+
+        $scope.plugin = {
+            gid: 'org.apache.maven.plugins',
+            gids: ['org.apache.maven.plugins'],
+            aid: 'maven-help-plugin',
+            aids: ['maven-help-plugin',
+                'maven-dependency-plugin',
+                'maven-compiler-plugin',
+                'maven-resources-plugin',
+                'maven-install-plugin',
+                'maven-assembly-plugin',
+                'maven-archiver-plugin']
+        }
+
+        $scope.setGid = function(gid) {
+            $scope.plugin.gid = gid;
+        }
+
+        $scope.setAid = function(aid) {
+            $scope.plugin.aid = aid;
         }
 
         var mvn = $('#mvn');
@@ -382,5 +410,38 @@
             });
         }
 
+        $scope.runDescribePlugin = function() {
+            if (cantRun()) {
+                return;
+            }
+            var mvnCommand = mvn.val();
+            fileSystem.stat(mvnCommand, function(err, stat) {
+                if (err) {
+                    return;
+                }
+                if (stat.isFile()) {
+                    var mvnCommandInput = $('#mvnCommand');
+                    if (mvnCommandInput) {
+                        mvnCommandInput.val(mvn.val())
+                    }
+
+                    var pomFile;
+                    if (!pom.parent().hasClass('has-error')) {
+                            pomFile - pom.val();
+                    }
+
+                    var describePluginCommand = $('#describe-plugin-command');
+                    if (describePluginCommand) {
+                        describePluginCommand.val(mvn.val() + (pomFile ? ' -f ' + pomFile : '') + ' help:describe -Ddetail -Dplugin=' + $scope.plugin.gid + ':' + $scope.plugin.aid)
+                    }
+                    var describePlugin = $('#describe-plugin');
+                    if (describePlugin) {
+                        runMvnCommand(mvnCommand, pomFile,
+                            ['help:describe', '-Ddetail', '-Dplugin=' + $scope.plugin.gid + ':' + $scope.plugin.aid],
+                            describePlugin);
+                    }
+                }
+            });
+        }
     });
 })();
