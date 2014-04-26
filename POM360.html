@@ -135,7 +135,7 @@
 							<button ng-click="selectMvnCommand()" type="button" class="btn btn-default btn-block" id="selectmvn">
 								<span class="glyphicon glyphicon-floppy-open"></span>
 							</button>
-							<input style="display: none;" id="mvnCommandSelector" type="file" />
+							<input style="display: none;" id="mvnCommandSelector" type="file" nwworkingdir="{{config.mvnCommandDir}}"/>
 						</div>
 					</div>
 					<div class="form-group">
@@ -163,7 +163,7 @@
 							<button ng-click="selectPomFile()" type="button" class="btn btn-default btn-block" id="selectPom">
 								<span class="glyphicon glyphicon-floppy-open"></span>
 							</button>
-							<input style="display: none;" id="pomFileSelector" type="file" accept=".xml"/>
+							<input style="display: none;" id="pomFileSelector" type="file" accept=".xml" nwworkingdir="{{config.pomDir}}"/>
 						</div>
 						<div class="col-sm-1">
 							<button type="button" class="btn btn-default btn-block">

@@ -73,8 +73,10 @@
 
         $scope.config = {
             mvnCommand: 'mvn',
+            mvnCommandDir: '.',
             mvnOptions: '',
             pomFile: '',
+            pomDir: '.',
             defaultPomFile: path.join(process.cwd(), 'pom.xml'),
             settingsFile: '',
             defaultSettingsFile: path.join(pathExtra.homedir(), '.m2', 'settings.xml')
@@ -164,9 +166,13 @@
         // Select mvn command
         var mvnCommandSelector = $('#mvnCommandSelector');
         mvnCommandSelector.change(function(evt) {
-            $scope.config.mvnCommand = mvnCommandSelector.val();
-            $scope.$apply();
-            setTimeout(validateMvnCommand, 0);
+            if ('' !== mvnCommandSelector.val().trim()) {
+                $scope.config.mvnCommand = mvnCommandSelector.val().trim();
+                $scope.config.mvnCommandDir = path.dirname($scope.config.mvnCommand);
+
+                $scope.$apply();
+                setTimeout(validateMvnCommand, 0);
+            }
         });
         $scope.selectMvnCommand = function() {
             mvnCommandSelector.trigger('click');
@@ -175,9 +181,13 @@
         // Select POM file
         var pomFileSelector = $('#pomFileSelector');
         pomFileSelector.change(function(evt) {
-            $scope.config.pomFile = pomFileSelector.val();
-            $scope.$apply();
-            setTimeout(validatePomFile, 0);
+            if ('' !== pomFileSelector.val().trim()) {
+                $scope.config.pomFile = pomFileSelector.val().trim();
+                $scope.config.pomDir = path.dirname($scope.config.pomFile);
+
+                $scope.$apply();
+                setTimeout(validatePomFile, 0);
+            }
         });
         $scope.selectPomFile = function() {
             pomFileSelector.trigger('click');
