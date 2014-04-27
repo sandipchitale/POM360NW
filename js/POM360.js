@@ -110,6 +110,25 @@
         var mvn = $('#mvn');
         var pom = $('#pom');
         var settings = $('#settings');
+        var editorDialog = $('#editor-dialog');
+
+        $scope.editor = {
+            title: '',
+            content: ''
+        };
+
+        $scope.save = function() {
+            try {
+                if ('POM' === $scope.editor.title) {
+                    var pomFile = pom.val().trim();
+                    fileSystem.writeFileSync(pomFile, $scope.editor.content);
+                }
+            } finally {
+            }
+            editorDialog.modal('hide');
+            $scope.editor.title = '';
+            $scope.editor.content = '';
+        };
 
         function cantRun() {
             return mvn.parent().hasClass('has-error') || pom.parent().hasClass('has-error') || settings.parent().hasClass('has-error');
@@ -138,11 +157,6 @@
         validatePomFile();
         pom.on('input', validatePomFile);
 
-        $scope.editor = {
-            title: '',
-            content: ''
-        }
-
         $scope.editPomFile = function() {
             if (pom.parent().hasClass('has-error')) {
                 return;
@@ -155,7 +169,7 @@
                 $scope.editor.title = 'POM';
                 $scope.editor.content = data;
                 $scope.$apply();
-                $("#editor-dialog").modal();
+                editorDialog.modal();
             });
         }
 
@@ -186,7 +200,7 @@
                 $scope.editor.title = 'Settings';
                 $scope.editor.content = data;
                 $scope.$apply();
-                $("#editor-dialog").modal();
+                editorDialog.modal();
             });
         }
 
