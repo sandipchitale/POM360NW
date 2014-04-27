@@ -122,6 +122,9 @@
                 if ('POM' === $scope.editor.title) {
                     var pomFile = pom.val().trim();
                     fileSystem.writeFileSync(pomFile, $scope.editor.content);
+                } else  if ('Settings' === $scope.editor.title) {
+                    var settingsFile = settings.val().trim();
+                    fileSystem.writeFileSync(settingsFile, $scope.editor.content);
                 }
             } finally {
             }
