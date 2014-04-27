@@ -641,5 +641,17 @@
                 }
             });
         }
+
+        var mvnDetailsDiv = $("#mvn-details");
+        $scope.mvnDetailsShowing = true;
+        $scope.toggleMvnDetails = function() {
+			if ($scope.mvnDetailsShowing) {
+				mvnDetailsDiv.hide();
+			} else {
+				mvnDetailsDiv.show();
+			}
+			$scope.mvnDetailsShowing = !$scope.mvnDetailsShowing;
+			$scope.$apply();
+        }
     });
 })();
