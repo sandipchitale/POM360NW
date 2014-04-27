@@ -133,9 +133,65 @@
             $scope.editor.content = '';
         };
 
+        var findTextInput = $('#find-text');
+
+        $scope.findSpecs = {
+            text: '',
+            caseSensitive: false
+        };
+
+        $scope.findText = function(focusBackToFindTextInput) {
+            if ('' === $scope.findSpecs.text) {
+                return;
+            }
+            var textAreas = $('textarea');
+            if (textAreas) {
+                var textToFind;
+                if ($scope.findSpecs.caseSensitive) {
+                    textToFind = $scope.findSpecs.text;
+                } else {
+                    textToFind = $scope.findSpecs.text.toLowerCase();
+                }
+                for (var i = 0; i < textAreas.length; i++) {
+                    var textArea = $(textAreas[i]);
+
+                    var text;
+                    if ($scope.findSpecs.caseSensitive) {
+                        text = textArea.val();
+                    } else {
+                        text = textArea.val().toLowerCase();
+                    }
+                    if (text.length === 0) {
+                        continue;
+                    }
+                    var selectionStart = textArea.prop('selectionStart');
+                    var selectionEnd = textArea.prop('selectionEnd');
+                    var foundAt = text.indexOf($scope.findSpecs.text, selectionEnd);
+                    if (foundAt != -1) {
+                        textArea.prop('selectionStart', foundAt);
+                        textArea.prop('selectionEnd', foundAt + $scope.findSpecs.text.length);
+                    } else if (selectionEnd != 0) {
+                        text = text.substring(0, selectionEnd);
+                        var foundAt = text.indexOf($scope.findSpecs.text, 0);
+                        if (foundAt != -1) {
+                            textArea.prop('selectionStart', foundAt);
+                            textArea.prop('selectionEnd', foundAt + $scope.findSpecs.text.length);
+                        }
+                    }
+                    if (foundAt != -1) {
+                        // scroll
+                        textArea.focus();
+                        if (focusBackToFindTextInput) {
+                            // setTimeout(function() { findTextInput.focus(); }, 0);
+                        }
+                    }
+                }
+            }
+        };
+
         function cantRun() {
             return mvn.parent().hasClass('has-error') || pom.parent().hasClass('has-error') || settings.parent().hasClass('has-error');
-        }
+        };
 
         function validateMvnCommand() {
             var mvnCommand = mvn.val().trim();
@@ -144,7 +200,7 @@
             } else {
                 mvn.parent().addClass('has-error');
             }
-        }
+        };
         validateMvnCommand();
         mvn.on('input', validateMvnCommand);
 
@@ -156,7 +212,7 @@
             } else {
                 pom.parent().addClass('has-error');
             }
-        }
+        };
         validatePomFile();
         pom.on('input', validatePomFile);
 
@@ -174,7 +230,7 @@
                 $scope.$apply();
                 editorDialog.modal();
             });
-        }
+        };
 
         function validateSettingsFile() {
             var settingsFile = settings.val().trim();
