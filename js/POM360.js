@@ -138,6 +138,27 @@
         validatePomFile();
         pom.on('input', validatePomFile);
 
+        $scope.editor = {
+            title: '',
+            content: ''
+        }
+
+        $scope.editPomFile = function() {
+            if (pom.parent().hasClass('has-error')) {
+                return;
+            }
+
+            fileSystem.readFile(pom.val().trim(), 'utf8', function(err, data) {
+                if (err) {
+                    return console.log(err);
+                }
+                $scope.editor.title = 'POM';
+                $scope.editor.content = data;
+                $scope.$apply();
+                $("#editor-dialog").modal();
+            });
+        }
+
         function validateSettingsFile() {
             var settingsFile = settings.val().trim();
 
@@ -153,6 +174,21 @@
         }
         validateSettingsFile();
         settings.on('input', validateSettingsFile);
+
+        $scope.editSettingsFile = function() {
+            if (settings.parent().hasClass('has-error')) {
+                return;
+            }
+            fileSystem.readFile(settings.val().trim(), 'utf8', function(err, data) {
+                if (err) {
+                    return console.log(err);
+                }
+                $scope.editor.title = 'Settings';
+                $scope.editor.content = data;
+                $scope.$apply();
+                $("#editor-dialog").modal();
+            });
+        }
 
         $scope.debug = function() {
             gui.Window.get().showDevTools();

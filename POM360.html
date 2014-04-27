@@ -177,7 +177,7 @@
 							<input style="display: none;" id="pomFileSelector" type="file" accept=".xml" nwworkingdir="{{config.pomDir}}"/>
 						</div>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default btn-block">
+							<button ng-click="editPomFile()" type="button" class="btn btn-default btn-block">
 								<span class="glyphicon glyphicon-pencil"></span>
 							</button>
 						</div>
@@ -199,7 +199,7 @@
 							<input style="display: none;" id="settingsFileSelector" type="file" accept=".xml"/>
 						</div>
 						<div class="col-sm-1">
-							<button type="button" class="btn btn-default btn-block">
+							<button ng-click="editSettingsFile()" type="button" class="btn btn-default btn-block">
 								<span class="glyphicon glyphicon-pencil"></span>
 							</button>
 						</div>
@@ -207,6 +207,30 @@
 				</form>
 			</div>
 		</nav>
+
+		<div class="modal fade" id="editor-dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title">Edit {{editor.title}}</h4>
+					</div>
+					<div class="modal-body">
+						<textarea ng-model="editor.content" class="form-control mono" rows="16" wrap="off"></textarea>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">
+							Close
+						</button>
+						<button type="button" class="btn btn-primary">
+							Save
+						</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 		<script src="js/jquery.min.js"></script>
