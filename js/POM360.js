@@ -20,6 +20,9 @@
         }).state('agenda', {
             url : '/agenda',
             templateUrl : 'templates/agenda.html'
+        }).state('profiles', {
+            url : '/profiles',
+            templateUrl : 'templates/profiles.html'
         }).state('effective-settings', {
             url : '/effective-settings',
             templateUrl : 'templates/effective-settings.html'
@@ -53,6 +56,10 @@
 
         $scope.atAgendaTab = function() {
             return ($location.path() === '/agenda');
+        }
+
+        $scope.atProfilesTab = function() {
+            return ($location.path() === '/profiles');
         }
 
         $scope.atEffectiveSettingsTab = function() {
@@ -458,6 +465,42 @@
                             var siteAgenda = $('#site-agenda');
                             if (siteAgenda) {
                                 runMvnCommand(mvnCommand, pomFile, ['help:describe', '-Dcmd=site'], siteAgenda,
+                                [{searchValue: /\[INFO\].+\n/g, replaceValue: ''}]);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        $scope.runProfiles = function() {
+            if (cantRun()) {
+                return;
+            }
+            var mvnCommand = mvn.val();
+            fileSystem.stat(mvnCommand, function(err, stat) {
+                if (err) {
+                    return;
+                }
+                if (stat.isFile()) {
+                    var pomFile = pom.val();
+                    fileSystem.stat(pomFile, function(err, stat) {
+                        if (err) {
+                            return;
+                        }
+                        if (stat.isFile()) {
+                            var profilesCommand = $('#profiles-command');
+                            if (profilesCommand) {
+                                profilesCommand.val(mvn.val() + (pomFile ? ' -f ' + pomFile : '') + ' help:describe -Dcmd=clean -Dcmd=deploy -Dcmd=site')
+                            }
+                            var activeProfiles = $('#active-profiles');
+                            if (activeProfiles) {
+                                runMvnCommand(mvnCommand, pomFile, ['help:active-profiles'], activeProfiles,
+                                [{searchValue: /\[INFO\].+\n/g, replaceValue: ''}]);
+                            }
+                            var allProfiles = $('#all-profiles');
+                            if (allProfiles) {
+                                runMvnCommand(mvnCommand, pomFile, ['help:all-profiles'], allProfiles,
                                 [{searchValue: /\[INFO\].+\n/g, replaceValue: ''}]);
                             }
                         }
