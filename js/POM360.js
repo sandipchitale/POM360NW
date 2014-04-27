@@ -45,6 +45,9 @@
             return $rootScope.openThis(pathExtra.homedir() + '/' + relativePathToFile);
         }
     }).controller('POM360Controller', function($scope, $location) {
+        $scope.debug = function() {
+            gui.Window.get().showDevTools();
+        }
 
         $scope.atEffectivePomTab = function() {
             return ($location.path() === '/' || $location.path() === '/effective-pom');
@@ -147,6 +150,13 @@
             caseSensitive: false
         };
 
+        var lastFocusedTextArea;
+        $(document.body).focusin(function(e) {
+            if ($(e.target).is('textarea')) {
+                lastFocusedTextArea = e.target;
+            }
+        });
+
         $scope.findText = function(focusBackToFindTextInput) {
             if ('' === $scope.findSpecs.text) {
                 return;
@@ -159,38 +169,49 @@
                 } else {
                     textToFind = $scope.findSpecs.text.toLowerCase();
                 }
+                var textArea;
                 for (var i = 0; i < textAreas.length; i++) {
-                    var textArea = $(textAreas[i]);
+                    if ($(textAreas[i]).get()[0] === lastFocusedTextArea) {
+                        textArea = $(textAreas[i]);
+                        break;
+                    };
+                }
+                if (!textArea && textAreas.length > 0) {
+                    textArea = $(textAreas[0]);
+                }
 
-                    var text;
-                    if ($scope.findSpecs.caseSensitive) {
-                        text = textArea.val();
-                    } else {
-                        text = textArea.val().toLowerCase();
-                    }
-                    if (text.length === 0) {
-                        continue;
-                    }
-                    var selectionStart = textArea.prop('selectionStart');
-                    var selectionEnd = textArea.prop('selectionEnd');
-                    var foundAt = text.indexOf($scope.findSpecs.text, selectionEnd);
+                if (!textArea) {
+                    return;
+                }
+
+                var text;
+                if ($scope.findSpecs.caseSensitive) {
+                    text = textArea.val();
+                } else {
+                    text = textArea.val().toLowerCase();
+                }
+                if (text.length === 0) {
+                    return;
+                }
+                var selectionStart = textArea.prop('selectionStart');
+                var selectionEnd = textArea.prop('selectionEnd');
+                var foundAt = text.indexOf($scope.findSpecs.text, selectionEnd);
+                if (foundAt != -1) {
+                    textArea.prop('selectionStart', foundAt);
+                    textArea.prop('selectionEnd', foundAt + $scope.findSpecs.text.length);
+                } else if (selectionEnd != 0) {
+                    text = text.substring(0, selectionEnd);
+                    var foundAt = text.indexOf($scope.findSpecs.text, 0);
                     if (foundAt != -1) {
                         textArea.prop('selectionStart', foundAt);
                         textArea.prop('selectionEnd', foundAt + $scope.findSpecs.text.length);
-                    } else if (selectionEnd != 0) {
-                        text = text.substring(0, selectionEnd);
-                        var foundAt = text.indexOf($scope.findSpecs.text, 0);
-                        if (foundAt != -1) {
-                            textArea.prop('selectionStart', foundAt);
-                            textArea.prop('selectionEnd', foundAt + $scope.findSpecs.text.length);
-                        }
                     }
-                    if (foundAt != -1) {
-                        // scroll
-                        textArea.focus();
-                        if (focusBackToFindTextInput) {
-                            // setTimeout(function() { findTextInput.focus(); }, 0);
-                        }
+                }
+                if (foundAt != -1) {
+                    // scroll
+                    textArea.focus();
+                    if (focusBackToFindTextInput) {
+                        // setTimeout(function() { findTextInput.focus(); }, 0);
                     }
                 }
             }
@@ -282,10 +303,6 @@
             });
         }
 
-        $scope.debug = function() {
-            gui.Window.get().showDevTools();
-        }
-
         $scope.exit = function() {
             gui.Window.get().close();
             return false;
@@ -354,6 +371,10 @@
                     cwd: pomDir,
                     env: process.env
                 });
+
+            if ($scope.mvnDetailsShowing) {
+                $scope.toggleMvnDetails();
+            }
 
             mvnProcess.stdout.on('data', function (data) {
                 textArea.val(textArea.val() + data);
