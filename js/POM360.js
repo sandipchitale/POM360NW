@@ -200,6 +200,18 @@
             return mvn.parent().hasClass('has-error') || pom.parent().hasClass('has-error') || settings.parent().hasClass('has-error');
         };
 
+        $scope.mvnHasError =  function() {
+            return mvn.parent().hasClass('has-error');
+        }
+
+        $scope.pomHasError =  function() {
+            return pom.parent().hasClass('has-error');
+        }
+
+        $scope.settingsHasError =  function() {
+            return settings.parent().hasClass('has-error');
+        }
+
         function validateMvnCommand() {
             var mvnCommand = mvn.val().trim();
             if (fileSystem.existsSync(mvnCommand)) {
