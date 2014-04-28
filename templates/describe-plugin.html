@@ -11,26 +11,28 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<div class="col-sm-6">
+		<label for="G" class="col-sm-1 control-label">G</label>
+		<div class="col-sm-5">
 			<div class="input-group">
-				<input type="text" class="form-control" ng-model="plugin.gid">
+				<input id="G" type="text" class="form-control" ng-model="plugin.gid">
 				<div class="input-group-btn">
 					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu pull-right" style="background-color: white !important;">
-						<li ng-repeat="gid in plugin.gids"><button class="btn btn-link" ng-click="setGid(gid)">{{gid}}</button></li>
+						<li ng-repeat="gid in plugin.gids"><button class="btn btn-default btn-block" style="text-align: left !important; padding-left: 5px; padding-right: 5px" ng-click="setGid(gid)">{{gid}}</button></li>
 					</ul>
 				</div><!-- /btn-group -->
 			</div><!-- /input-group -->
 		</div>
-		<div class="col-sm-6">
+		<label for="A" class="col-sm-1 control-label">A</label>
+		<div class="col-sm-5">
 			<div class="input-group">
-				<input type="text" class="form-control" ng-model="plugin.aid">
+				<input id="A" type="text" class="form-control" ng-model="plugin.aid">
 				<div class="input-group-btn">
 					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu pull-right" style="background-color: white !important;">
-						<li ng-repeat="aid in plugin.aids"><button class="btn btn-link" ng-click="setAid(aid)">{{aid}}</button></li>
+						<li ng-repeat="aid in plugin.aids"><button class="btn btn-default btn-block" style="text-align: left !important; padding-left: 5px;padding-right: 5px;" ng-click="setAid(aid)">{{aid}}</button></li>
 					</ul>
 				</div><!-- /btn-group -->
 			</div><!-- /input-group -->

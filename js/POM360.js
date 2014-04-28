@@ -115,7 +115,20 @@
         }
 
         $scope.cli = {
-            args: "-h"
+            args: '-h',
+            argsCommon: [
+                '-h',
+                'install',
+                'clean install',
+                '-DskipText=true package',
+                'clean package',
+                '-DskipText=true clean package',
+                'clean'
+            ]
+        }
+
+        $scope.setCliArgs = function(cliArgs) {
+            $scope.cli.args = cliArgs;
         }
 
         $scope.plugin = {
