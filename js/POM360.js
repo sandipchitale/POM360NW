@@ -81,11 +81,33 @@
             return ($location.path() === '/describe-plugin');
         }
 
+        var pom360SettingsFilePath =  path.join(pathExtra.homedir(), '.pom360.json');
+        var pom360Settings = {
+
+        }
+
+        function loadSettings() {
+            if (fileSystem.existsSync(pom360SettingsFilePath)) {
+                try {
+                    pom360Settings = JSON.parse(fileSystem.readFileSync(pom360SettingsFilePath));
+                } catch (e) {
+                }
+            } else {
+                saveSettings();
+            }
+        };
+
+        function saveSettings() {
+            fileSystem.writeFileSync(pom360SettingsFilePath, JSON.stringify(pom360Settings));
+        }
+
+        loadSettings();
+
         $scope.config = {
-            mvnCommand: 'mvn',
+            mvnCommand: pom360Settings.mvnCommand || 'mvn',
             mvnCommandDir: '.',
             mvnOptions: '',
-            pomFile: '',
+            pomFile: pom360Settings.pomFile || '',
             pomDir: '.',
             defaultPomFile: path.join(process.cwd(), 'pom.xml'),
             settingsFile: '',
@@ -241,8 +263,8 @@
                 mvn.parent().addClass('has-error');
             }
         };
-        validateMvnCommand();
         mvn.on('input', validateMvnCommand);
+        setTimeout(0, validateMvnCommand);
 
         function validatePomFile() {
             var pomFile = pom.val().trim();
@@ -253,8 +275,8 @@
                 pom.parent().addClass('has-error');
             }
         };
-        validatePomFile();
         pom.on('input', validatePomFile);
+        setTimeout(0, validatePomFile);
 
         $scope.editPomFile = function() {
             if (pom.parent().hasClass('has-error')) {
@@ -285,8 +307,8 @@
                 settings.parent().addClass('has-error');
             }
         }
-        validateSettingsFile();
         settings.on('input', validateSettingsFile);
+        setTimeout(0, validateSettingsFile);
 
         $scope.editSettingsFile = function() {
             if (settings.parent().hasClass('has-error')) {
@@ -365,6 +387,13 @@
             } else if ((typeof commands) === 'string') {
                 args = args.concat(commands.split('\\s+'));
             }
+
+            pom360Settings.mvnCommand = mvnCommand;
+            if (pomFile) {
+                pom360Settings.pomFile = pomFile;
+            }
+            saveSettings();
+
             var mvnProcess = childProcess.spawn(mvnCommand,
                 args,
                 {
