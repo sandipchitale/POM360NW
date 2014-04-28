@@ -661,12 +661,12 @@
 
                     var pomFile;
                     if (!pom.parent().hasClass('has-error')) {
-                            pomFile - pom.val();
+                            pomFile = pom.val().trim();
                     }
 
                     var cliArgsOutput = $('#cli-args-output');
 
-                    runMvnCommand(mvnCommand, null, $scope.cli.args, cliArgsOutput);
+                    runMvnCommand(mvnCommand, ('' === pomFile ? null : pomFile), $scope.cli.args.split(" "), cliArgsOutput);
                 }
             });
         }
