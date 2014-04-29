@@ -20,10 +20,10 @@
 	</div>
 	<div class="form-group">
 		<div class="col-sm-6">
-			<textarea class="form-control mono" id="active-profiles" rows="14" wrap="off" readonly></textarea>
+			<textarea ng-keyup="$event.keyCode == 13 ? findText(true) : null" class="form-control mono" id="active-profiles" rows="14" wrap="off" readonly></textarea>
 		</div>
 		<div class="col-sm-6">
-			<textarea class="form-control mono" id="all-profiles" rows="14" wrap="off" readonly></textarea>
+			<textarea ng-keyup="$event.keyCode == 13 ? findText(true) : null" class="form-control mono" id="all-profiles" rows="14" wrap="off" readonly></textarea>
 		</div>
 	</div>
 </form>

@@ -221,7 +221,7 @@
             }
         });
 
-        $scope.findText = function(focusBackToFindTextInput) {
+        $scope.findText = function() {
             if ('' === $scope.findSpecs.text) {
                 return;
             }
@@ -274,9 +274,7 @@
                 if (foundAt != -1) {
                     // scroll
                     textArea.focus();
-                    if (focusBackToFindTextInput) {
-                        // setTimeout(function() { findTextInput.focus(); }, 0);
-                    }
+                    setTimeout(function() { findTextInput.focus(); textArea.focus(); }, 0);
                 }
             }
         };

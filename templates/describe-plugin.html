@@ -40,7 +40,7 @@
 	</div>
 	<div class="form-group">
 		<div class="col-sm-12">
-			<textarea class="form-control mono" id="describe-plugin" rows="14" readonly></textarea>
+			<textarea ng-keyup="$event.keyCode == 13 ? findText(true) : null" class="form-control mono" id="describe-plugin" rows="14" readonly></textarea>
 		</div>
 	</div>
 </form>
