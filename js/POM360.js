@@ -7,6 +7,29 @@
     var openThis = require('open');
     var process = require('process');
 
+    var mvnContent;
+    var mvnFooter;
+
+    var initialHeight;
+    var dynamicHeight;
+
+    function contentHeight() {
+        var nowHeight = mvnFooter.offset().top - mvnContent.offset().top;
+        var textAreas = $('textarea');
+        if (textAreas) {
+            for (var i = 0; i < textAreas.length; i++) {
+                var textArea = $(textAreas[i]);
+                if (textArea.hasClass('dynamic-height')) {
+                    textArea.height(textArea.height() + nowHeight - dynamicHeight);
+                } else {
+                    textArea.height(textArea.height() + nowHeight - initialHeight);
+                }
+                textArea.addClass('dynamic-height');
+            }
+        }
+        dynamicHeight = nowHeight;
+    }
+
     angular.module("POM360App", ['ui.router']).config(function($stateProvider, $urlRouterProvider) {
         $stateProvider.state('POM360', {
             url : '/',
@@ -36,7 +59,13 @@
             url : '/describe-plugin',
             templateUrl : 'templates/describe-plugin.html'
         });
-    }).run(function($rootScope, $window, $location) {
+    })
+    .run(function($rootScope, $window, $location) {
+        // listen change start events
+        $rootScope.$on('$stateChangeSuccess', function() {
+                setTimeout(contentHeight, 1);
+            });
+
         $rootScope.openThis = function(fileOrUrl) {
             openThis(fileOrUrl);
             return false;
@@ -705,16 +734,26 @@
             });
         }
 
+        mvnContent = $('#mvn-content');
+        mvnFooter = $('#mvn-footer');
+
+        initialHeight = mvnFooter.offset().top - mvnContent.offset().top;
+        dynamicHeight = initialHeight;
+
+        $(window).resize(contentHeight);
+
         var mvnDetailsDiv = $("#mvn-details");
         $scope.mvnDetailsShowing = true;
         $scope.toggleMvnDetails = function() {
+            var beforeHeight = mvnFooter.height();
 			if ($scope.mvnDetailsShowing) {
 				mvnDetailsDiv.hide();
 			} else {
 				mvnDetailsDiv.show();
 			}
 			$scope.mvnDetailsShowing = !$scope.mvnDetailsShowing;
-			$scope.$apply();
+            contentHeight();
         }
+
     });
 })();
